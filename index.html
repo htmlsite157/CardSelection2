@@ -9,106 +9,106 @@
 
     body {
       background: #111;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
-      font-family: Arial, sans-serif;
-    }
-
-    .game-container {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 40px;
-      padding: 20px;
+      font-family: Arial, sans-serif;
       padding-bottom: 80px;
     }
 
+    /* GRID */
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 150px);
-      grid-template-rows: repeat(3, 200px);
-      gap: 20px;
-      perspective: 1000px;
+      grid-template-columns: repeat(3, 130px);
+      grid-template-rows: repeat(3, 180px);
+      gap: 16px;
     }
-
-    @media (max-width: 520px) {
+    @media (max-width: 500px) {
       .grid {
-        grid-template-columns: repeat(3, 90px);
-        grid-template-rows: repeat(3, 125px);
-        gap: 12px;
+        grid-template-columns: repeat(3, 85px);
+        grid-template-rows: repeat(3, 120px);
+        gap: 10px;
       }
     }
 
+    /* CARD FLIP — standard technique */
     .card {
-      width: 150px;
-      height: 200px;
+      width: 130px;
+      height: 180px;
       position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.6s ease;
+      perspective: 600px;
       cursor: default;
     }
-
-    @media (max-width: 520px) {
-      .card { width: 90px; height: 125px; }
+    @media (max-width: 500px) {
+      .card { width: 85px; height: 120px; }
     }
-
     .card.clickable { cursor: pointer; }
-    .card.flipped { transform: rotateY(180deg); }
 
-    .card-face {
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.55s ease;
+    }
+    /* face-down by default: back is visible */
+    .card.face-down .card-inner  { transform: rotateY(0deg); }
+    /* face-up: front is visible */
+    .card.face-up   .card-inner  { transform: rotateY(180deg); }
+
+    .card-front,
+    .card-back {
       position: absolute;
       inset: 0;
-      border-radius: 14px;
+      border-radius: 12px;
       backface-visibility: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
-      user-select: none;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.6);
     }
 
-    .card-front {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-    }
-
+    /* BACK — pink, shown when face-down */
     .card-back {
       background: linear-gradient(135deg, #f093fb, #f5576c);
-      transform: rotateY(180deg);
+      transform: rotateY(0deg);
     }
-
-    .card-text {
-      font-size: 16px;
-      font-weight: bold;
-      color: #fff;
-      text-align: center;
-      padding: 10px;
-      line-height: 1.4;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
-    }
-
-    @media (max-width: 520px) { .card-text { font-size: 11px; padding: 6px; } }
-
     .card-pattern {
-      width: 75%;
-      height: 75%;
-      border-radius: 10px;
+      width: 72%; height: 72%;
+      border-radius: 8px;
       border: 2px solid rgba(255,255,255,0.5);
       background: repeating-linear-gradient(
         45deg,
-        transparent, transparent 8px,
-        rgba(255,255,255,0.25) 8px, rgba(255,255,255,0.25) 16px
+        transparent 0px, transparent 7px,
+        rgba(255,255,255,0.25) 7px, rgba(255,255,255,0.25) 14px
       );
     }
 
+    /* FRONT — purple, shown when face-up */
+    .card-front {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      transform: rotateY(180deg);
+    }
+    .card-text {
+      font-size: 15px;
+      font-weight: bold;
+      color: #fff;
+      text-align: center;
+      padding: 8px;
+      line-height: 1.4;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+    @media (max-width: 500px) { .card-text { font-size: 10px; padding: 5px; } }
+
+    /* START BUTTON */
     .start-btn {
       position: fixed;
-      bottom: 30px;
+      bottom: 28px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 14px 44px;
+      padding: 13px 44px;
       font-size: 22px;
       font-weight: bold;
       color: #fff;
@@ -116,22 +116,21 @@
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 4px 18px rgba(102,126,234,0.5);
-      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 18px rgba(102,126,234,0.55);
       z-index: 300;
     }
-    .start-btn:hover  { transform: translateX(-50%) scale(1.06); box-shadow: 0 6px 24px rgba(102,126,234,0.7); }
-    .start-btn:active { transform: translateX(-50%) scale(0.96); }
+    .start-btn:hover  { opacity: 0.9; }
     .start-btn.hidden { display: none; }
 
+    /* PICK PROMPT */
     .prompt {
       position: fixed;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       background: rgba(255,255,255,0.95);
-      padding: 28px 50px;
-      border-radius: 18px;
-      font-size: 26px;
+      padding: 24px 48px;
+      border-radius: 16px;
+      font-size: 24px;
       font-weight: bold;
       color: #333;
       box-shadow: 0 10px 40px rgba(0,0,0,0.5);
@@ -142,10 +141,11 @@
     }
     .prompt.show { opacity: 1; }
 
+    /* RESULT OVERLAY */
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.93);
+      background: rgba(0,0,0,0.92);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -158,48 +158,42 @@
 
     .result-card {
       background: linear-gradient(135deg, #667eea, #764ba2);
-      width: 280px; height: 380px;
-      border-radius: 24px;
+      width: 260px; height: 360px;
+      border-radius: 22px;
       display: flex;
       justify-content: center;
       align-items: center;
       box-shadow: 0 20px 60px rgba(102,126,234,0.6);
-      transform: scale(0.5);
+      transform: scale(0.4);
       transition: transform 0.5s;
     }
     .overlay.show .result-card { transform: scale(1); }
-
     .result-text {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: bold;
       color: #fff;
       text-align: center;
       padding: 20px;
-      line-height: 1.4;
+      line-height: 1.5;
       text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
     }
 
+    /* BLOCKED MESSAGE */
     .blocked-message {
-      position: fixed;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
       background: rgba(255,255,255,0.96);
-      padding: 40px 60px;
-      border-radius: 20px;
+      padding: 38px 56px;
+      border-radius: 18px;
       text-align: center;
       box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-      z-index: 500;
     }
-    @media (max-width: 480px) { .blocked-message { padding: 28px 30px; width: 88%; } }
-    .blocked-message h2 { color: #764ba2; font-size: 30px; margin-bottom: 14px; }
-    .blocked-message p  { color: #444; font-size: 17px; line-height: 1.7; }
+    @media (max-width: 480px) { .blocked-message { padding: 26px 28px; width: 86%; } }
+    .blocked-message h2 { color: #764ba2; font-size: 28px; margin-bottom: 12px; }
+    .blocked-message p  { color: #444; font-size: 16px; line-height: 1.7; }
   </style>
 </head>
 <body>
 
-  <div class="game-container">
-    <div class="grid" id="grid"></div>
-  </div>
+  <div class="grid" id="grid"></div>
 
   <button class="start-btn" id="startBtn">START</button>
   <div class="prompt" id="prompt">Pick a Card!</div>
@@ -211,31 +205,25 @@
   </div>
 
   <script>
-    // TOKEN SYSTEM
-    // Each unique ?token=XYZ can only be used once (stored in localStorage).
-    // To let a user play again, send them a new link with a different token.
+    /* ── TOKEN SYSTEM ──────────────────────────────────────────────
+       Each unique ?token=XYZ can only be used once.
+       Send a new link with a new token to let the user play again.
+    ─────────────────────────────────────────────────────────────── */
+    var token = new URLSearchParams(window.location.search).get('token');
 
-    function getToken() {
-      return new URLSearchParams(window.location.search).get('token');
+    function isTokenUsed(t) {
+      var used = JSON.parse(localStorage.getItem('used_tokens') || '[]');
+      return used.indexOf(t) !== -1;
     }
-
-    function isTokenUsed(token) {
-      const used = JSON.parse(localStorage.getItem('used_tokens') || '[]');
-      return used.includes(token);
+    function markTokenUsed(t) {
+      var used = JSON.parse(localStorage.getItem('used_tokens') || '[]');
+      if (used.indexOf(t) === -1) { used.push(t); }
+      localStorage.setItem('used_tokens', JSON.stringify(used));
     }
-
-    function markTokenUsed(token) {
-      const used = JSON.parse(localStorage.getItem('used_tokens') || '[]');
-      if (!used.includes(token)) {
-        used.push(token);
-        localStorage.setItem('used_tokens', JSON.stringify(used));
-      }
-    }
-
     function showBlocked(reason) {
       document.getElementById('startBtn').style.display = 'none';
       document.getElementById('grid').style.display = 'none';
-      const div = document.createElement('div');
+      var div = document.createElement('div');
       div.className = 'blocked-message';
       div.innerHTML = reason === 'no_token'
         ? '<h2>🔒 Invalid Link</h2><p>This link is not valid.<br>Please ask for a valid game link.</p>'
@@ -243,100 +231,101 @@
       document.body.appendChild(div);
     }
 
-    const token = getToken();
+    /* ── INIT ─────────────────────────────────────────────────── */
+    var RESULT = '💵 ទឹកប្រាក់ 10$';
+    var prizes = [
+      'ប្រេងម៉ូតូ 10 កេស', 'ប្រេងម៉ូតូ 10 កេស', 'ប្រេងម៉ូតូ 10 កេស',
+      'ប្រេងម៉ូតូ 5 កេស',  'ប្រេងម៉ូតូ 5 កេស',  'ប្រេងម៉ូតូ 5 កេស',
+      'ប្រេងម៉ូតូ 2 កេស',  'ប្រេងម៉ូតូ 2 កេស',  RESULT
+    ];
+
+    var cardData    = [];
+    var canClick    = false;
+    var gameStarted = false;
+
+    var grid       = document.getElementById('grid');
+    var startBtn   = document.getElementById('startBtn');
+    var prompt     = document.getElementById('prompt');
+    var overlay    = document.getElementById('overlay');
+    var resultText = document.getElementById('resultText');
 
     if (!token) {
       showBlocked('no_token');
     } else if (isTokenUsed(token)) {
       showBlocked('used');
     } else {
-      initGame();
+      cardData = prizes.map(function(t, i) { return { text: t, id: i }; });
+      renderCards('down');
     }
 
-    // GAME LOGIC
-    const RESULT = '💵 ទឹកប្រាក់ 10$';
-
-    const prizes = [
-      'ប្រេងម៉ូតូ 10 កេស', 'ប្រេងម៉ូតូ 10 កេស', 'ប្រេងម៉ូតូ 10 កេស',
-      'ប្រេងម៉ូតូ 5 កេស',  'ប្រេងម៉ូតូ 5 កេស',  'ប្រេងម៉ូតូ 5 កេស',
-      'ប្រេងម៉ូតូ 2 កេស',  'ប្រេងម៉ូតូ 2 កេស',  RESULT
-    ];
-
-    let cardData    = [];
-    let canClick    = false;
-    let gameStarted = false;
-
-    const grid       = document.getElementById('grid');
-    const startBtn   = document.getElementById('startBtn');
-    const prompt     = document.getElementById('prompt');
-    const overlay    = document.getElementById('overlay');
-    const resultText = document.getElementById('resultText');
-
-    function initGame() {
-      cardData = prizes.map((text, i) => ({ text, id: i }));
-      renderCards(false); // start face-down so values are hidden
-    }
-
-    function renderCards(faceUp) {
+    /* ── RENDER ───────────────────────────────────────────────── */
+    function renderCards(side) {
+      // side = 'up' (show prize text) or 'down' (show pink back)
       grid.innerHTML = '';
-      cardData.forEach((data, index) => {
-        const card = document.createElement('div');
-        // faceUp=false means add 'flipped' class so the pink back shows
-        card.className = 'card' + (faceUp ? '' : ' flipped');
-        card.dataset.index = index;
+      cardData.forEach(function(data, index) {
+        var card = document.createElement('div');
+        card.className = 'card ' + (side === 'up' ? 'face-up' : 'face-down');
         card.innerHTML =
-          '<div class="card-face card-front"><div class="card-text">' + data.text + '</div></div>' +
-          '<div class="card-face card-back"><div class="card-pattern"></div></div>';
-        card.addEventListener('click', function() { handleClick(index); });
+          '<div class="card-inner">' +
+            '<div class="card-back"><div class="card-pattern"></div></div>' +
+            '<div class="card-front"><div class="card-text">' + data.text + '</div></div>' +
+          '</div>';
+        card.addEventListener('click', (function(i) {
+          return function() { handleClick(i); };
+        })(index));
         grid.appendChild(card);
       });
     }
 
+    /* ── START ────────────────────────────────────────────────── */
     startBtn.addEventListener('click', function() {
       if (gameStarted) return;
       gameStarted = true;
       startBtn.classList.add('hidden');
 
-      // Flip all cards face-up so user sees the values briefly
-      renderCards(true);
+      // Flip all face-up so user sees the prizes
+      renderCards('up');
 
       // Then scramble after 1.2s
-      setTimeout(scramble, 1200);
+      setTimeout(doScramble, 1200);
     });
 
-    function scramble() {
-      function shuffle() {
-        for (var i = cardData.length - 1; i > 0; i--) {
-          var j = Math.floor(Math.random() * (i + 1));
-          var tmp = cardData[i]; cardData[i] = cardData[j]; cardData[j] = tmp;
-        }
+    /* ── SCRAMBLE ─────────────────────────────────────────────── */
+    function shuffle() {
+      for (var i = cardData.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = cardData[i]; cardData[i] = cardData[j]; cardData[j] = tmp;
       }
+    }
 
+    function doScramble() {
       shuffle();
       var count = 0;
-      var interval = setInterval(function() {
+      var iv = setInterval(function() {
         shuffle();
-        renderCards(true); // keep face-up during shuffle
+        renderCards('up'); // show face-up while shuffling
         count++;
         if (count >= 6) {
-          clearInterval(interval);
-          // Flip all face-down, then let user pick
+          clearInterval(iv);
           setTimeout(function() {
-            renderCards(false);
+            renderCards('down'); // flip all face-down
             setTimeout(function() {
               prompt.classList.add('show');
               setTimeout(function() {
                 prompt.classList.remove('show');
                 canClick = true;
                 var cards = document.querySelectorAll('.card');
-                cards.forEach(function(c) { c.classList.add('clickable'); });
+                for (var i = 0; i < cards.length; i++) {
+                  cards[i].classList.add('clickable');
+                }
               }, 1000);
-            }, 400);
+            }, 500);
           }, 400);
         }
-      }, 200);
+      }, 220);
     }
 
+    /* ── CLICK ────────────────────────────────────────────────── */
     function handleClick(index) {
       if (!canClick) return;
       canClick = false;
@@ -344,16 +333,13 @@
       var cards = document.querySelectorAll('.card');
       var clicked = cards[index];
 
-      // Always reveal the winning prize
-      clicked.querySelector('.card-front .card-text').textContent = RESULT;
+      // Always show the winning result
+      clicked.querySelector('.card-text').textContent = RESULT;
+      clicked.classList.remove('face-down');
+      clicked.classList.add('face-up');
 
-      // Flip face-up to reveal
-      clicked.classList.remove('flipped');
-
-      // Mark this token as used
       markTokenUsed(token);
 
-      // Show result overlay
       setTimeout(function() {
         resultText.textContent = RESULT;
         overlay.classList.add('show');
